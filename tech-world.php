@@ -21,7 +21,10 @@ function add_dashboard_tech_widget() {
 
 function display_dashboard_tech_widget() {
 
-    echo 'hi';
+    $quotes = get_quote_from_database();
+
+    echo '<h2>Quote of the Day</h2>';
+    echo '<p>' . $quotes . '</p>';
 }
 
 
@@ -36,3 +39,38 @@ function techworld_quotes_admin_menu() {
 }
 add_action('admin_menu', 'techworld_quotes_admin_menu');
 
+
+function save_quote_to_database($quote) {
+    update_option('techworld_quotes', json_encode($quote));
+}
+
+function get_quote_from_database() {
+    return get_option('techworld_quotes');
+}
+
+function techworld_quotes_admin_page() {
+    if (isset($_POST['submit_quote'])) {
+        $quote [] = $_POST['quote'];
+        save_quote_to_database($quote);
+    }
+
+    $quotes = get_option('techworld_quotes');
+
+    echo '<h2>Add New Quote</h2>';
+    echo '<form method="post">';
+    echo '<label for="quote">Quote:</label>';
+    echo '<textarea id="quote" name="quote"></textarea><br>';
+    echo '<input type="submit" name="submit_quote" value="Submit Quote"><br>';
+
+    echo '<h2>Existing Quotes</h2>';
+    if ($quotes) {
+        echo '<ul>';
+        foreach ($quotes as $quote) {
+            echo '<li>' . $quote . '</li>';
+        }
+        echo '</ul>';
+    } else {
+        echo '<p>No quotes found</p>';
+    }
+    echo '</form>';
+}
