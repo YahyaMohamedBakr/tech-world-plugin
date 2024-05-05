@@ -41,7 +41,16 @@ add_action('admin_menu', 'techworld_quotes_admin_menu');
 
 
 function save_quote_to_database($quote) {
-    update_option('techworld_quotes', json_encode($quote));
+    $old_cuotes =get_quote_from_database();
+    if(!empty($old_cuotes)){
+        $new = $old_cuotes;
+        $new []=$quote[0];
+    }else{
+        $new[]=$quote[0];
+    }
+
+   
+    update_option('techworld_quotes', $new);
 }
 
 function get_quote_from_database() {
@@ -64,6 +73,7 @@ function techworld_quotes_admin_page() {
 
     echo '<h2>Existing Quotes</h2>';
     if ($quotes) {
+        //$quotes = json_decode($quotes);
         echo '<ul>';
         foreach ($quotes as $quote) {
             echo '<li>' . $quote . '</li>';
