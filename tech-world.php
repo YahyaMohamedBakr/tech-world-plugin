@@ -19,12 +19,28 @@ function add_dashboard_tech_widget() {
     wp_add_dashboard_widget( 'dashboard_tech_widget', 'Tech World', 'display_dashboard_tech_widget' );
 }
 
+
+
 function display_dashboard_tech_widget() {
-
     $quotes = get_quote_from_database();
+    if (!empty($quotes)) {
+        $last_updated = get_option('techworld_quotes_last_updated', ''); 
 
-    echo '<h2>Quote of the Day</h2>';
-    echo '<p>' . $quotes . '</p>';
+        if ($last_updated !== date('Y-m-d')) {
+            $random_quote = $quotes[array_rand($quotes)];
+            update_option('techworld_quotes_last_updated', date('Y-m-d')); 
+            echo '<h2>Quote of the Day</h2>';
+            echo '<p>' . $random_quote . '</p>';
+            $last_quote = update_option('techworld_quotes_last_quote', $random_quote);
+
+        } else {
+            $last_quote = get_option('techworld_quotes_last_quote', '');
+            echo '<h2>Quote of the Day</h2>';
+            echo '<p>' . $last_quote . '</p>';
+        }
+    } else {
+        echo '<p>No quotes found</p>';
+    }
 }
 
 
