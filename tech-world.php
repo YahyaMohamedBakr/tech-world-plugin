@@ -14,14 +14,14 @@ if (!defined('ABSPATH')) {
 
 
 //add  dashboard widget
-add_action( 'wp_dashboard_setup', 'add_dashboard_tech_widget' );
-function add_dashboard_tech_widget() {
-    wp_add_dashboard_widget( 'dashboard_tech_widget', 'Tech World', 'display_dashboard_tech_widget' );
+add_action( 'wp_dashboard_setup', 'techworld_add_dashboard' );
+function techworld_add_dashboard() {
+    wp_add_dashboard_widget( 'dashboard_tech_widget', 'Tech World', 'techworld_display_dashboard_widget' );
 }
 
 
 
-function display_dashboard_tech_widget() {
+function techworld_display_dashboard_widget() {
     $quotes = get_option('techworld_quotes');
 
     if (!empty($quotes)) {
@@ -57,7 +57,7 @@ function techworld_quotes_admin_menu() {
 add_action('admin_menu', 'techworld_quotes_admin_menu');
 
 //save quote
-function save_quote_to_database($quote) {
+function techworld_save_quote_to_database($quote) {
     $old_cuotes =get_option('techworld_quotes');
     if(!empty($old_cuotes)){
         $new = $old_cuotes;
@@ -79,7 +79,7 @@ function save_quote_to_database($quote) {
 function techworld_quotes_admin_page() {
     if (isset($_POST['submit_quote'])) {
         $quote [] = $_POST['quote'];
-        save_quote_to_database($quote);
+        techworld_save_quote_to_database($quote);
     }
 
     $quotes = get_option('techworld_quotes');
